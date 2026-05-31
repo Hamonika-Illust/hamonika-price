@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>イラスト見積もり</title>
+
+<style>
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  margin: 30px 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr;
+    max-width: 90%;
+  }
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: 0.2s;
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;  background: #f5f5f5;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.card span {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: normal;
+  opacity: 0.7;
+  line-height: 1.6; 
+}
+</style>
+</head>
+
+<body>
+
+<h1>イラスト見積もり</h1>
+
+<div class="container">
+
+  <a href="2d.html" class="card">
+    <img src="images/2d_thumbnail.png">
+    <h3>2DCGイラスト</h3>
+    <span>
+      いわゆる一枚絵と呼ばれるものです。<br>
+      イベントCG、グッズ、サムネイル向け<br>
+      仕上がりサイズ (10,000×10,000px) 350dpi以内
+    </span>
+  </a>
+
+  <a href="standing.html" class="card">
+    <img src="images/standing_image.png">
+    <h3>立ち絵イラスト</h3>
+    <span>
+      全身絵。ゲーム、グッズ、デザイン向け<br>
+      仕上がりサイズ (10,000×10,000px) 350dpi以内
+    </span>
+  </a>
+
+  <a href="bustup.html" class="card">
+    <img src="images/bustup_thumbnail.png">
+    <h3>バストアップ</h3>
+    <span>
+      SNSアイコン向け。頭から胸下まで<br>
+      仕上がりサイズ (7,500×7,500px) 350dpi以内
+    </span>
+  </a>
+
+  <a href="mini.html" class="card">
+    <img src="images/mini_thumbnail.png">
+    <h3>ミニキャラ</h3>
+    <span>
+      2等身 グッズ、SNSアイコン向け<br>
+      仕上がりサイズ (4,000×4,000px) 350dpi以内
+    </span>
+  </a>
+
+</div>
+</body>
+</html>

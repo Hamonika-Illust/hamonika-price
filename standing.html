@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>見積もり</title>
+
+<style>
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: #f7f7f7;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 100px;
+  color: #333;
+}
+
+#summary {
+  font-size: 13px;
+  margin-bottom: 5px;
+  opacity: 0.9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-left: 4px solid #ff7f9f;
+  padding-left: 10px;
+}
+
+select, input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+select:focus, input:focus {
+  border-color: #ff7f9f;
+  outline: none;
+}
+
+/* スライダー */
+.slider {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.slide {
+  display: none;
+}
+
+.slide.active {
+  display: block;
+}
+
+.slide img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: #f5f5f5;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button.prev, button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* 合計バー */
+.total-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ff7f9f;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.total-bar button {
+  margin-top: 10px;
+  background: white;
+  color: #ff7f9f;
+  border-radius: 8px;
+  padding: 10px;
+  border: none;
+  width: 90%;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- スライダー -->
+<div class="slider">
+  <div class="slide active">
+    <img src="images/standing_image.png" onclick="openLightbox(this.src)">
+
+  </div>
+ 
+
+  <button class="prev">◀</button>
+  <button class="next">▶</button>
+</div>
+
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img">
+</div>
+
+<h2>立ち絵イラスト 見積もり</h2>
+
+<div class="section">
+  <label>【メインキャラクター】</label>
+<select id="main">
+  <option value="40000">女性キャラクター‥‥￥40,000</option>
+  <option value="53000">男性キャラクター‥‥￥53,000</option>
+  <option value="53000">動物・マスコット‥‥￥53,000</option>
+</select>
+</div>
+
+ <div class="section">
+  <label>【オプション】</label>
+
+  表情差分（+￥1,000）
+  <input type="number" id="diff" value="0" min="0" max="10">
+
+ 
+
+  <select id="design">
+    <option value="0">新規デザインなし‥‥＋￥0</option>
+    <option value="12000">新規デザインあり‥‥￥12,000</option>
+  </select>
+
+
+  武器（+￥3,000）
+  <input type="number" id="weapon" value="0" min="0" max="10">
+
+
+</div>
+
+<div class="section">
+  <label>【背景】</label>
+  <select id="bg">
+  <option value="0">なし‥‥＋￥0</option>
+  <option value="0">単色‥‥＋￥0</option>
+  <option value="1000">簡易エフェクト‥‥＋￥1,000</option>
+  <option value="4000">建物、人工物等(屋内)‥‥＋￥4,000</option>
+  <option value="8000">建物、人工物等(屋外)‥‥＋￥8,000</option>
+  <option value="8000">自然物‥‥＋￥8,000</option>
+</select>
+</div>
+
+  <div class="section">
+  <label>【追加キャラクター】</label>
+
+  女性キャラクター（+￥12,000）
+  <input type="number" id="addFemale" value="0" min="0" max="10">
+
+  男性キャラクター（+￥25,000）
+  <input type="number" id="addMale" value="0" min="0" max="10">
+
+  動物・マスコット（+￥25,000）
+  <input type="number" id="addAnimal" value="0" min="0" max="10">
+
+  <hr>
+
+  "追加キャラクター分" 合計差分数（+￥1,000）
+  <input type="number" id="addDiff" value="0" min="0" max="50">
+</div>
+
+<div class="section">
+  <label>【成人向け描写】</label>
+<select id="r18">
+  <option value="0">なし‥‥＋￥0</option>
+  <option value="12000">あり‥‥＋￥12,000</option>
+</select></div>
+
+<div class="section">
+  <label>【納期】</label>
+  <select id="deadline">
+  <option value="1">4ヶ月以内⋯×100％</option>
+  <option value="1.2">3ヶ月以内⋯×120％</option>
+  <option value="1.5">2ヶ月以内⋯×150％</option>
+  <option value="3">1ヶ月以内⋯×300％</option>
+</select>
+</div>
+
+<div class="section">
+  <label>【SNS宣伝・ポートフォリオ掲載】</label>
+  <select id="sns">
+    <option value="0">許可（日付制限・指定なし）</option>
+    <option value="100">許可（日付制限・指定あり）＋¥100</option>
+    <option value="10000">非許可 ＋¥10,000</option>
+  </select>
+</div>
+
+<div class="section">
+  <label>【割引】</label>
+ <select id="discount">
+  <option value="1">なし</option>
+  <option value="0.7">初回⋯30％OFF</option>
+  <option value="0.8">2回目⋯20％OFF</option>
+</select>
+</div>
+
+<div class="section">
+  <label>【キャラクター詳細・依頼内容】</label>
+
+  <p style="font-size:14px; line-height:1.6;">
+    キャラクターのデザインやポーズ、表情、
+    構図、世界観など<br>詳細がある場合は、以下にご記入ください。<br><strong>※参考資料画像がある場合は、必ずメールに添付をお願いします。</strong>
+  </p>
+
+  <textarea
+    id="details"
+    rows="8"
+    placeholder="例
+・女性キャラクター
+・銀髪のロング
+・ピンク色の瞳
+・フリルのついた着物
+・穏やかな笑顔
+・カフェの座席に座っている
+・落ち着いた雰囲気"
+    style="
+      width:100%;
+      padding:10px;
+      border:1px solid #ddd;
+      border-radius:8px;
+      resize:vertical;
+      box-sizing:border-box;
+    "
+  ></textarea>
+</div>
+
+
+<!-- 合計 -->
+<div class="total-bar">
+    合計：¥<span id="total">0</span>
+  <br>
+  <button onclick="sendEstimate()">この内容で依頼する(Gmailを開きます)</button>
+</div>
+
+<script>
+// スライダー
+let current = 0;
+const slides = document.querySelectorAll(".slide");
+
+document.querySelector(".next").onclick = () => {
+  current = (current + 1) % slides.length;
+  showSlide();
+};
+
+document.querySelector(".prev").onclick = () => {
+  current = (current - 1 + slides.length) % slides.length;
+  showSlide();
+};
+
+function showSlide() {
+  slides.forEach(s => s.classList.remove("active"));
+  slides[current].classList.add("active");
+}
+
+// Lightbox
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").style.display = "flex";
+}
+function closeLightbox() {
+  document.getElementById("lightbox").style.display = "none";
+}
+
+// 計算
+function calc() {
+
+  // 入力制御
+  diff.value = Math.min(10, Math.max(0, Math.floor(diff.value)));
+  weapon.value = Math.min(10, Math.max(0, Math.floor(weapon.value)));
+
+  addFemale.value = Math.min(10, Math.max(0, Math.floor(addFemale.value)));
+  addMale.value = Math.min(10, Math.max(0, Math.floor(addMale.value)));
+  addAnimal.value = Math.min(10, Math.max(0, Math.floor(addAnimal.value)));
+  addDiff.value = Math.min(50, Math.max(0, Math.floor(addDiff.value)));
+  
+
+  let total = 0;
+
+  total += +main.value;
+  total += diff.value * 1000;
+  total += weapon.value * 3000;
+  total += +design.value;
+  total += +bg.value;
+
+  // 👇追加キャラ計算
+  const addPrice =
+    (addFemale.value * 12000) +
+    (addMale.value * 25000) +
+    (addAnimal.value * 25000);
+
+  total += addPrice;
+
+  // 👇追加キャラ差分
+  total += addDiff.value * 1000;
+
+  total += +r18.value;
+  
+
+  total *= deadline.value;
+  total *= discount.value;
+
+  total += +sns.value;
+
+
+  total = Math.round(total);
+  totalEl.textContent = total.toLocaleString();
+}
+const totalEl = document.getElementById("total");
+
+document.querySelectorAll("select,input,textarea").forEach(el=>{
+  el.oninput = calc;
+});
+
+// 送信
+function sendEstimate() {
+
+  // 各要素取得
+  const mainEl = document.getElementById("main");
+  const diffEl = document.getElementById("diff");
+  const weaponEl = document.getElementById("weapon");
+  const designEl = document.getElementById("design");
+  const bgEl = document.getElementById("bg");
+  const r18El = document.getElementById("r18");
+  const deadlineEl = document.getElementById("deadline");
+  const snsEl = document.getElementById("sns");
+  const discountEl = document.getElementById("discount");
+  const addFemale = document.getElementById("addFemale");
+  const addMale = document.getElementById("addMale");
+  const addAnimal = document.getElementById("addAnimal");
+  const addDiff = document.getElementById("addDiff");
+  const detailsEl = document.getElementById("details");
+
+  // 表示テキスト取得
+  const mainText = mainEl.options[mainEl.selectedIndex].text;
+  const designText = designEl.options[designEl.selectedIndex].text;
+  const bgText = bgEl.options[bgEl.selectedIndex].text;
+  const r18Text = r18El.options[r18El.selectedIndex].text;
+  const deadlineText = deadlineEl.options[deadlineEl.selectedIndex].text;
+  const snsText = snsEl.options[snsEl.selectedIndex].text;
+  const discountText = discountEl.options[discountEl.selectedIndex].text;
+
+ 
+
+
+
+const addFemaleVal = +addFemale.value;
+const addMaleVal = +addMale.value;
+const addAnimalVal = +addAnimal.value;
+const addDiffVal = +addDiff.value;
+
+  // テキスト作成
+  let text = `【見積もり内容】\n\n`;
+
+  text += `■メイン\n${mainText}\n\n`;
+
+  text += `■オプション\n`;
+  text += `差分：${diffEl.value}（¥${(diffEl.value * 1000).toLocaleString()}）\n`;
+  text += `武器：${weaponEl.value}（¥${(weaponEl.value * 3000).toLocaleString()}）\n`;
+  text += `${designText}\n\n`;
+
+  text += `■背景\n${bgText}\n\n`;
+
+ if (addFemaleVal + addMaleVal + addAnimalVal > 0) {
+  if (addFemaleVal > 0) text += `女性 ×${addFemaleVal}\n`;
+  if (addMaleVal > 0) text += `男性 ×${addMaleVal}\n`;
+  if (addAnimalVal > 0) text += `動物・マスコット ×${addAnimalVal}\n`;
+
+  text += `差分：${addDiffVal}（¥${(addDiffVal*1000).toLocaleString()}）\n\n`;
+} else {
+  text += `なし\n\n`;
+}
+
+  text += `■成人向け\n${r18Text}\n\n`;
+
+  text += `■SNS掲載\n${snsText}\n\n`;
+
+  text += `■納期\n${deadlineText}\n\n`;
+
+  text += `■割引\n${discountText}\n\n`;
+
+  text += `■キャラクター詳細・依頼内容\n`;
+  text += `${detailsEl.value || "未記入"}\n\n`;
+
+  text += `-------------------\n`;
+  text += `合計：¥${totalEl.textContent}`;
+
+ // コピー
+  navigator.clipboard.writeText(text);
+
+const gmailUrl =
+`https://mail.google.com/mail/?view=cm&fs=1&to=hihi.hamonika@gmail.com&su=${encodeURIComponent("立ち絵イラスト依頼")}&body=${encodeURIComponent(text)}`;
+
+window.open(gmailUrl, "_blank");
+
+}
+calc();
+</script>
+
+</body>
+</html>
