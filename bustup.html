@@ -199,7 +199,7 @@ button.prev, button.next {
   <input type="number" id="diff" value="0" min="0" max="10">
 
  
-
+ 新規キャラクターデザイン（+￥5,000）
   <select id="design">
     <option value="0">新規デザインなし‥‥＋￥0</option>
     <option value="5000">新規デザインあり‥‥￥5,000</option>
@@ -233,7 +233,7 @@ button.prev, button.next {
   男性キャラクター（+￥20,000）
   <input type="number" id="addMale" value="0" min="0" max="10">
 
-  動物・マスコット（+￥28,000）
+  動物・マスコット（+￥25,000）
   <input type="number" id="addAnimal" value="0" min="0" max="10">
 
   <hr>
@@ -369,7 +369,7 @@ function calc() {
   const addPrice =
     (addFemale.value * 9000) +
     (addMale.value * 20000) +
-    (addAnimal.value * 28000);
+    (addAnimal.value * 25000);
 
   total += addPrice;
 
